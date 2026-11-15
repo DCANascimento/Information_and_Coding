@@ -217,3 +217,5 @@ int ppm_histogram(std::vector<uint8_t> pixels, int bin_width, std::string file_n
     return 0;
 
 }
+
+

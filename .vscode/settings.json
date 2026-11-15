@@ -50,5 +50,6 @@
   "editor.wordWrapColumn": 80,
   "editor.minimap.enabled": false,
   "explorer.confirmDelete": false,
-  "cmake.sourceDirectory": "C:/Users/dcana/Documents/GitHub/IC_Trabalho_1/lossy"
+  "cmake.sourceDirectory": "C:/Users/dcana/Documents/GitHub/IC_Trabalho_1/lossy",
+  "cmake.ignoreCMakeListsMissing": true
 }
