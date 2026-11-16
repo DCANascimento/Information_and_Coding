@@ -7,7 +7,7 @@
 
 #include "images.h"
 
-std::vector<uint16_t> read_raw16(std::string file_name) {
+Image_16 read_raw16(std::string file_name) {
 
     std::string full_path_file = "../datasets/imgs-raw16/" + file_name;
 
@@ -31,7 +31,14 @@ std::vector<uint16_t> read_raw16(std::string file_name) {
 
     file.close();
 
-    return pixels;
+    Image_16 img;
+
+    img.width = 0;
+    img.height = 0;
+    img.scale = 65536;
+    img.pixels = pixels;
+
+    return img;
 }
 
 Image_8 read_pgm8(std::string file_name) {
@@ -96,14 +103,14 @@ Image_8 read_pgm8(std::string file_name) {
     file.close();
 
     // Teste
-    uint8_t old_buffer;
-    std::FILE* f = std::fopen("../datasets/imgs-pgm8/barbara.pgm", "r");
-    int old_count = 0;
-    while (std::fread(&old_buffer, sizeof(uint8_t), 1, f) && old_count++ < 100) {
-        std::cout << static_cast<int>(old_buffer) << "\n";
-        std::cout << old_buffer << "\n";
-    }
-    std::fclose(f);
+    //uint8_t old_buffer;
+    //std::FILE* f = std::fopen("../datasets/imgs-pgm8/barbara.pgm", "r");
+    //int old_count = 0;
+    //while (std::fread(&old_buffer, sizeof(uint8_t), 1, f) && old_count++ < 100) {
+    //    std::cout << static_cast<int>(old_buffer) << "\n";
+    //    std::cout << old_buffer << "\n";
+    //}
+    //std::fclose(f);
 
     Image_8 img;
 

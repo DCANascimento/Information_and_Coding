@@ -18,15 +18,15 @@ int main(int argc, char **argv) {
 
     if (file_type.compare(".raw") == 0) {
     
-        std::vector<uint16_t> pixels = read_raw16(file_name);
+        Image_16 img = read_raw16(file_name);
 
-        pixels = quantize_uint16_t(pixels, target_bits);
+        img.pixels = quantize_uint16_t(img.pixels, target_bits);
 
         std::string dir_name = "Quants";
         std::filesystem::create_directories(dir_name);
 
         // TODOs
-        write_raw16(dir_name + "/" + file_name + "_quant_" + std::to_string(target_bits) + ".raw", pixels);
+        write_raw16(dir_name + "/" + file_name + "_quant_" + std::to_string(target_bits) + ".raw", img);
 
     } else if (file_type.compare(".pgm") == 0) {
 

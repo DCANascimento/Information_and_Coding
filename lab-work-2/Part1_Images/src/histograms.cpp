@@ -5,6 +5,7 @@
 #include <vector>
 #include <cstdint>
 #include <filesystem>
+#include <math.h>
 
 int plot_histogram(std::vector<int> hist_counts, std::string file_name, std::string file_type, int bin_width, int max_value) {
 
@@ -156,6 +157,14 @@ int raw16_histogram(std::vector<uint16_t> pixels, int bin_width, std::string fil
     }
 
 
+    int normal_entropy;
+
+    for (uint16_t i = 0; i < max_value + 1; i++) {
+        int prob = hist_counts[i] / pixels.size();
+        normal_entropy -= (prob * log2(prob));
+    }
+
+
     return 0;
 
 }
@@ -176,6 +185,13 @@ int pgm8_histogram(std::vector<uint8_t> pixels, int bin_width, std::string file_
     if (plot_histogram(hist_counts, file_name, "pgm8", bin_width, max_value) ) {
         std::cerr << "Error creating the svg file\n";
         return 1;
+    }
+
+    int normal_entropy;
+
+    for (uint8_t i = 0; i < max_value + 1; i++) {
+        int prob = hist_counts[i] / pixels.size();
+        normal_entropy -= (prob * log2(prob));
     }
 
     return 0;
@@ -212,6 +228,25 @@ int ppm_histogram(std::vector<uint8_t> pixels, int bin_width, std::string file_n
     if (plot_histogram(hist_counts_B, file_name, "ppm_B", bin_width, max_value) ) {
         std::cerr << "Error creating the svg file\n";
         return 1;
+    }
+
+    int normal_entropy_R;
+    int normal_entropy_G;
+    int normal_entropy_B;
+
+    for (uint8_t i = 0; i < max_value + 1; i++) {
+        int prob = hist_counts_R[i] / pixels.size() / 3;
+        normal_entropy_R -= (prob * log2(prob));
+    }
+
+    for (uint8_t i = 0; i < max_value + 1; i++) {
+        int prob = hist_counts_G[i] / pixels.size() / 3;
+        normal_entropy_G -= (prob * log2(prob));
+    }
+
+    for (uint8_t i = 0; i < max_value + 1; i++) {
+        int prob = hist_counts_B[i] / pixels.size() / 3;
+        normal_entropy_B -= (prob * log2(prob));
     }
 
     return 0;

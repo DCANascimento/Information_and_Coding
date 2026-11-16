@@ -16,9 +16,9 @@ int main(int argc, char **argv) {
 
     if (file_type.compare(".raw") == 0) {
     
-        std::vector<uint16_t> pixels = read_raw16(file_name);
+        Image_16 img = read_raw16(file_name);
 
-        if (raw16_histogram(pixels, bin_width, file_name)) {
+        if (raw16_histogram(img.pixels, bin_width, file_name)) {
             return 1;
         }
 

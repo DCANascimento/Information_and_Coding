@@ -21,10 +21,10 @@ int main(int argc, char **argv) {
 
     if (file_type.compare(".raw") == 0) {
     
-        std::vector<uint16_t> original_pixels = read_raw16(original_file);
-        std::vector<uint16_t> quantized_pixels = read_raw16(quantized_file);
+        Image_16 original_image = read_raw16(original_file);
+        Image_16 quantized_image = read_raw16(quantized_file);
 
-        if (compare_uint16(original_pixels, quantized_pixels)) {
+        if (compare_uint16(original_image.pixels, quantized_image.pixels)) {
             return 1;
         }
 
