@@ -1,5 +1,6 @@
 #include "read_images.h"
 #include "quantizations.h"
+#include "images.h"
 
 int main(int argc, char **argv) {
 
@@ -24,21 +25,21 @@ int main(int argc, char **argv) {
 
     } else if (file_type.compare(".pgm") == 0) {
 
-        std::vector<uint8_t> pixels = read_pgm8(file_name);
+        Image_8 img = read_pgm8(file_name);
 
-        pixels = quantize_uint8_t(pixels, target_bits);
+        img.pixels = quantize_uint8_t(img.pixels, target_bits);
 
         // TODOs
-        write_pgm8(file_name, pixels);
+        write_pgm8(file_name, img);
 
     } else if (file_type.compare(".ppm") == 0) {
 
-        std::vector<uint8_t> pixels = read_ppm(file_name);
+        Image_8 img = read_ppm(file_name);
 
-        pixels = quantize_uint8_t(pixels, target_bits);
+        img.pixels = quantize_uint8_t(img.pixels, target_bits);
 
         // TODOs
-        write_ppm(file_name, pixels);
+        write_ppm(file_name, img);
 
     } else {
         std::cerr << "Improper input file (must be .raw .pgm or .ppm)\n";

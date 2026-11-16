@@ -5,6 +5,8 @@
 #include <vector>
 #include <cstdint>
 
+#include "images.h"
+
 std::vector<uint16_t> read_raw16(std::string file_name) {
 
     std::string full_path_file = "../datasets/imgs-raw16/" + file_name;
@@ -32,7 +34,7 @@ std::vector<uint16_t> read_raw16(std::string file_name) {
     return pixels;
 }
 
-std::vector<uint8_t> read_pgm8(std::string file_name) {
+Image_8 read_pgm8(std::string file_name) {
 
     std::string full_path_file = "../datasets/imgs-pgm8/" + file_name;
 
@@ -103,12 +105,21 @@ std::vector<uint8_t> read_pgm8(std::string file_name) {
     //}
     //std::fclose(f);
 
-    return pixels;
+    Image_8 img;
+
+    img.width = width;
+    img.height = height;
+
+    //lets assume for now, too lazy to change code
+    img.scale = 255;
+    img.pixels = pixels;
+
+    return img;
 
 }
 
 
-std::vector<uint8_t> read_ppm(std::string file_name) {
+Image_8 read_ppm(std::string file_name) {
 
     std::string full_path_file = "../datasets/imgs-ppm/" + file_name;
 
@@ -169,7 +180,14 @@ std::vector<uint8_t> read_ppm(std::string file_name) {
 
     file.close();
 
-    return pixels;
+    Image_8 img;
+
+    img.width = width;
+    img.height = height;
+    img.scale = 255;
+    img.pixels = pixels;
+
+    return img;
 
 }
 

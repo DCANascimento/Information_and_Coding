@@ -1,5 +1,6 @@
 #include "read_images.h"
 #include "histograms.h"
+#include "images.h"
 
 int main(int argc, char **argv) {
 
@@ -23,17 +24,17 @@ int main(int argc, char **argv) {
 
     } else if (file_type.compare(".pgm") == 0) {
 
-        std::vector<uint8_t> pixels = read_pgm8(file_name);
+        Image_8 img = read_pgm8(file_name);
 
-        if (pgm8_histogram(pixels, bin_width, file_name)) {
+        if (pgm8_histogram(img.pixels, bin_width, file_name)) {
             return 1;
         }
 
     } else if (file_type.compare(".ppm") == 0) {
 
-        std::vector<uint8_t> pixels = read_ppm(file_name);
+        Image_8 img = read_ppm(file_name);
 
-        if (ppm_histogram(pixels, bin_width, file_name)) {
+        if (ppm_histogram(img.pixels, bin_width, file_name)) {
             return 1;
         }
 

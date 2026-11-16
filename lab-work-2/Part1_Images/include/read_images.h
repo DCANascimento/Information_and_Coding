@@ -2,11 +2,12 @@
 #include <fstream>
 #include <vector>
 #include <cstdint>
+#include "images.h"
 
 std::vector<uint16_t> read_raw16(std::string file_name);
-std::vector<uint8_t> read_pgm8(std::string file_name);
-std::vector<uint8_t> read_ppm(std::string file_name);
+Image_8 read_pgm8(std::string file_name);
+Image_8 read_ppm(std::string file_name);
 
 int write_raw16(std::string file_name, std::vector<uint16_t> pixels);
-int write_pgm8(std::string file_name, std::vector<uint8_t> pixels);
-int write_ppm(std::string file_name, std::vector<uint8_t> pixels);
+int write_pgm8(std::string file_name, Image_8 img);
+int write_ppm(std::string file_name, Image_8 img);
