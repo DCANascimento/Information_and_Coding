@@ -96,14 +96,14 @@ Image_8 read_pgm8(std::string file_name) {
     file.close();
 
     // Teste
-    //uint8_t old_buffer;
-    //std::FILE* f = std::fopen("../datasets/imgs-pgm8/barbara.pgm", "r");
-    //int old_count = 0;
-    //while (std::fread(&old_buffer, sizeof(uint8_t), 1, f) && old_count++ < 100) {
-    //    std::cout << static_cast<int>(old_buffer) << "\n";
-    //    std::cout << old_buffer << "\n";
-    //}
-    //std::fclose(f);
+    uint8_t old_buffer;
+    std::FILE* f = std::fopen("../datasets/imgs-pgm8/barbara.pgm", "r");
+    int old_count = 0;
+    while (std::fread(&old_buffer, sizeof(uint8_t), 1, f) && old_count++ < 100) {
+        std::cout << static_cast<int>(old_buffer) << "\n";
+        std::cout << old_buffer << "\n";
+    }
+    std::fclose(f);
 
     Image_8 img;
 
@@ -191,3 +191,79 @@ Image_8 read_ppm(std::string file_name) {
 
 }
 
+
+// Writes
+
+int write_raw16(std::string file_name, std::vector<uint16_t> pixels) {
+
+    std::ofstream file(file_name);
+    if (!file.is_open()) {
+        std::cerr << "Error opening file for writing: " << file_name << std::endl;
+        return 1;
+    }
+
+    for (uint16_t pixel : pixels) {
+        file << pixel;
+    }
+
+    file.close();
+
+    return 0;
+
+}
+
+
+int write_pgm8(std::string file_name, Image_8 img) {
+
+    std::ofstream file(file_name);
+    if (!file.is_open()) {
+        std::cerr << "Error opening file for writing: " << file_name << std::endl;
+        return 1;
+    }
+
+    char dimensions[10];
+
+    file << "P5\n";
+
+    sprintf(dimensions, "%d %d\n", img.width, img.height);
+    file << dimensions;
+
+    file << "255\n";
+
+    for (uint8_t pixel : img.pixels) {
+        file << pixel;
+    }
+
+    file.close();
+
+    return 0;
+
+}
+
+
+int write_ppm(std::string file_name, Image_8 img) {
+
+    std::ofstream file(file_name);
+    if (!file.is_open()) {
+        std::cerr << "Error opening file for writing: " << file_name << std::endl;
+        return 1;
+    }
+
+    char dimensions[10];
+
+    file << "P5\n";
+
+    sprintf(dimensions, "%d %d\n", img.width, img.height);
+    file << dimensions;
+
+    file << "255\n";
+
+    for (uint8_t pixel : img.pixels) {
+        file << pixel;
+    }
+
+    file.close();
+
+    return 0;
+
+}

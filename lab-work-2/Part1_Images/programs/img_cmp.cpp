@@ -1,0 +1,58 @@
+#include "read_images.h"
+#include "comparisons.h"
+#include "images.h"
+
+int main(int argc, char **argv) {
+
+    if (argc != 3) {
+        std::cout << "Usage: " << argv[0] << " original_file quantized_file\n";
+        return 1;
+    }
+
+    std::string original_file = argv[1];
+    std::string quantized_file = argv[2];
+
+    std::string file_type = original_file.substr(original_file.size() - 4);
+
+    if (file_type.compare(original_file.substr(original_file.size() - 4)) != 0) {
+        std::cerr << "Error: Different types of image files\n";
+        return 1;
+    }
+
+    if (file_type.compare(".raw") == 0) {
+    
+        std::vector<uint16_t> original_pixels = read_raw16(original_file);
+        std::vector<uint16_t> quantized_pixels = read_raw16(quantized_file);
+
+        if (compare_uint16(original_pixels, quantized_pixels)) {
+            return 1;
+        }
+
+
+    } else if (file_type.compare(".pgm") == 0) {
+
+        Image_8 original_img = read_pgm8(original_file);
+        Image_8 quantized_img = read_pgm8(quantized_file);
+
+        if (compare_uint8(original_img.pixels, quantized_img.pixels)) {
+            return 1;
+        }
+
+    } else if (file_type.compare(".ppm") == 0) {
+
+        Image_8 original_img = read_ppm(original_file);
+        Image_8 quantized_img = read_ppm(quantized_file);
+
+        if (compare_uint8(original_img.pixels, quantized_img.pixels)) {
+            return 1;
+        }
+
+    } else {
+        std::cerr << "Improper input file (must be .raw .pgm or .ppm)\n";
+        return 1;
+    }
+
+
+    return 0;
+
+}

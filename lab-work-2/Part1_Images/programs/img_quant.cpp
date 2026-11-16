@@ -2,6 +2,8 @@
 #include "quantizations.h"
 #include "images.h"
 
+#include <filesystem>
+
 int main(int argc, char **argv) {
 
     if (argc != 3) {
@@ -20,8 +22,11 @@ int main(int argc, char **argv) {
 
         pixels = quantize_uint16_t(pixels, target_bits);
 
+        std::string dir_name = "Quants";
+        std::filesystem::create_directories(dir_name);
+
         // TODOs
-        write_raw16(file_name, pixels);
+        write_raw16(dir_name + "/" + file_name + "_quant_" + std::to_string(target_bits) + ".raw", pixels);
 
     } else if (file_type.compare(".pgm") == 0) {
 
@@ -29,8 +34,11 @@ int main(int argc, char **argv) {
 
         img.pixels = quantize_uint8_t(img.pixels, target_bits);
 
+        std::string dir_name = "Quants";
+        std::filesystem::create_directories(dir_name);
+
         // TODOs
-        write_pgm8(file_name, img);
+        write_pgm8(dir_name + "/" + file_name + "_quant_" + std::to_string(target_bits) + ".pgm", img);
 
     } else if (file_type.compare(".ppm") == 0) {
 
@@ -38,8 +46,11 @@ int main(int argc, char **argv) {
 
         img.pixels = quantize_uint8_t(img.pixels, target_bits);
 
+        std::string dir_name = "Quants";
+        std::filesystem::create_directories(dir_name);
+
         // TODOs
-        write_ppm(file_name, img);
+        write_ppm(dir_name + "/" + file_name + "_quant_" + std::to_string(target_bits) + ".ppm", img);
 
     } else {
         std::cerr << "Improper input file (must be .raw .pgm or .ppm)\n";
