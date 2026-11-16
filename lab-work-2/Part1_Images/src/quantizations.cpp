@@ -15,7 +15,7 @@ std::vector<uint16_t> quantize_uint16_t(std::vector<uint16_t> pixels, int target
     int space = pow(2, 16 - target_bits);
     int difference;
 
-    for (int i = 0; i < pixels.size(); i++) {
+    for (size_t i = 0; i < pixels.size(); i++) {
 
         difference = pixels[i] % space;
 
@@ -43,7 +43,7 @@ std::vector<uint8_t> quantize_uint8_t(std::vector<uint8_t> pixels, int target_bi
     int space = pow(2, 8 - target_bits);
     int difference;
 
-    for (int i = 0; i < pixels.size(); i++) {
+    for (size_t i = 0; i < pixels.size(); i++) {
 
         difference = pixels[i] % space;
 
