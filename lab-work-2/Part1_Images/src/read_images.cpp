@@ -33,8 +33,20 @@ Image_16 read_raw16(std::string file_name) {
 
     Image_16 img;
 
-    img.width = 0;
-    img.height = 0;
+    // Getting width and height from the file_name
+    // finds the position of the widthxheight portion
+    int start = file_name.find("u16be-1x") + 8;
+    int end = file_name.find(".raw") - 1;
+
+    std::string dimensions = file_name.substr(start, end - start);
+
+    int middle = dimensions.find("x");
+
+    img.width = std::stoi(dimensions.substr(0, middle - 1));
+    img.height = std::stoi(dimensions.substr(middle + 1));
+
+    std::cout << img.width << img.height << "\n";
+
     img.scale = 65536;
     img.pixels = pixels;
 
@@ -203,14 +215,14 @@ Image_8 read_ppm(std::string file_name) {
 
 int write_raw16(std::string file_name, std::vector<uint16_t> pixels) {
 
-    std::ofstream file(file_name);
+    std::ofstream file(file_name, std::ios::binary);
     if (!file.is_open()) {
         std::cerr << "Error opening file for writing: " << file_name << std::endl;
         return 1;
     }
 
     for (uint16_t pixel : pixels) {
-        file << pixel;
+        file.write(reinterpret_cast<const char*>(&pixel), sizeof(pixel));
     }
 
     file.close();
@@ -222,7 +234,7 @@ int write_raw16(std::string file_name, std::vector<uint16_t> pixels) {
 
 int write_pgm8(std::string file_name, Image_8 img) {
 
-    std::ofstream file(file_name);
+    std::ofstream file(file_name, std::ios::binary);
     if (!file.is_open()) {
         std::cerr << "Error opening file for writing: " << file_name << std::endl;
         return 1;
@@ -238,7 +250,7 @@ int write_pgm8(std::string file_name, Image_8 img) {
     file << "255\n";
 
     for (uint8_t pixel : img.pixels) {
-        file << pixel;
+        file.write(reinterpret_cast<const char*>(&pixel), sizeof(pixel));
     }
 
     file.close();
@@ -266,7 +278,7 @@ int write_ppm(std::string file_name, Image_8 img) {
     file << "255\n";
 
     for (uint8_t pixel : img.pixels) {
-        file << pixel;
+        file.write(reinterpret_cast<const char*>(&pixel), sizeof(pixel));
     }
 
     file.close();

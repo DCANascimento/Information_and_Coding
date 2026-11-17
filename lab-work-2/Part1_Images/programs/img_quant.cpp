@@ -25,8 +25,7 @@ int main(int argc, char **argv) {
         std::string dir_name = "Quants";
         std::filesystem::create_directories(dir_name);
 
-        // TODOs
-        write_raw16(dir_name + "/" + file_name + "_quant_" + std::to_string(target_bits) + ".raw", img);
+        write_raw16(dir_name + "/" + file_name + "_quant_" + std::to_string(target_bits) + ".raw", img.pixels);
 
     } else if (file_type.compare(".pgm") == 0) {
 
@@ -37,7 +36,6 @@ int main(int argc, char **argv) {
         std::string dir_name = "Quants";
         std::filesystem::create_directories(dir_name);
 
-        // TODOs
         write_pgm8(dir_name + "/" + file_name + "_quant_" + std::to_string(target_bits) + ".pgm", img);
 
     } else if (file_type.compare(".ppm") == 0) {
@@ -49,7 +47,6 @@ int main(int argc, char **argv) {
         std::string dir_name = "Quants";
         std::filesystem::create_directories(dir_name);
 
-        // TODOs
         write_ppm(dir_name + "/" + file_name + "_quant_" + std::to_string(target_bits) + ".ppm", img);
 
     } else {
