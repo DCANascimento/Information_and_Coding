@@ -30,23 +30,25 @@ Image_16 read_raw16(std::string file_name) {
     file.close();
 
     Image_16 img;
+    img.pixels.resize(total_pixels);
 
     // Getting width and height from the file_name
     // finds the position of the widthxheight portion
     int start = file_name.find("u16be-1x") + 8;
     int end = file_name.find(".raw") - 1;
 
-    std::string dimensions = file_name.substr(start, end - start);
+    std::string dimensions = file_name.substr(start, end - start + 1);
 
     int middle = dimensions.find("x");
 
-    img.width = std::stoi(dimensions.substr(0, middle - 1));
+    img.width = std::stoi(dimensions.substr(0, middle));
     img.height = std::stoi(dimensions.substr(middle + 1));
 
-    std::cout << img.width << img.height << "\n";
+    std::cout << "Dimensions: " << img.width << " - "<< img.height << "\n";
 
-    img.scale = 65536;
+    img.scale = 65535;
     img.pixels = pixels;
+
 
     return img;
 }
@@ -62,8 +64,8 @@ Image_8 read_pgm8(std::string file_name) {
     // Skips P5
     file.seekg(3, std::ios::beg);
 
-    int width;
-    int height;
+    uint16_t width;
+    uint16_t height;
 
     int width_done = 0;
 
@@ -234,11 +236,11 @@ int write_pgm8(std::string file_name, Image_8 img) {
         return 1;
     }
 
-    char dimensions[10];
+    char dimensions[20];
 
     file << "P5\n";
 
-    sprintf(dimensions, "%d %d\n", img.width, img.height);
+    sprintf(dimensions, "%u %u\n", img.width, img.height);
     file << dimensions;
 
     file << "255\n";
@@ -262,11 +264,11 @@ int write_ppm(std::string file_name, Image_8 img) {
         return 1;
     }
 
-    char dimensions[10];
+    char dimensions[20];
 
     file << "P5\n";
 
-    sprintf(dimensions, "%d %d\n", img.width, img.height);
+    sprintf(dimensions, "%u %u\n", img.width, img.height);
     file << dimensions;
 
     file << "255\n";

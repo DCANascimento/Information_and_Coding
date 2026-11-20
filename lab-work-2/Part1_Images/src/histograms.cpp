@@ -140,14 +140,30 @@ int plot_histogram(std::vector<int> hist_counts, std::string file_name, std::str
 
 int raw16_histogram(Image_16 img, int bin_width, std::string file_name) {
 
-    int max_value = 65535;
+    uint16_t max_value = 65535;
 
     int vector_length = (max_value / bin_width) + 1;
 
     std::vector<int> hist_counts(vector_length, 0);
+    std::vector<int> vertical_counts(max_value + 1, 0);
+    std::vector<int> horizontal_counts(max_value + 1, 0);
 
-    for (uint16_t pixel : img.pixels) {
-        hist_counts[pixel / bin_width]++;
+    size_t img_size = img.pixels.size();
+
+    for (size_t i = 0; i < img_size; i++) {
+
+        hist_counts[img.pixels[i] / bin_width]++;
+
+        // doesnt trigger on the last line
+        if (i < (unsigned int)(img.width * (img.height - 1))) {
+            vertical_counts[abs(img.pixels[i] - img.pixels[i + img.width])]++;
+        }
+
+        // doesnt trigger on the last collumn
+        if (i % img.width != (unsigned int)img.width - 1) {
+            horizontal_counts[abs(img.pixels[i] - img.pixels[i + 1])]++;
+        }
+        
     }
 
 
@@ -157,18 +173,34 @@ int raw16_histogram(Image_16 img, int bin_width, std::string file_name) {
     }
 
 
-    int normal_entropy;
+    double normal_entropy = 0.0;
+    double vertical_entropy = 0.0;
+    double horizontal_entropy = 0.0;
 
-    for (uint16_t i = 0; i < max_value + 1; i++) {
-        int prob = hist_counts[i] / img.pixels.size();
-        normal_entropy -= (prob * log2(prob));
+
+    for (uint32_t i = 0; i < (unsigned int)max_value + 1; i++) {
+
+        double prob = (double)hist_counts[i] / img_size;
+        if (prob > 0) {
+            normal_entropy -= (prob * log2(prob));
+        }
+
+        double vert_prob = (double)vertical_counts[i] / (img_size - img.width);
+        if (vert_prob > 0) {
+            vertical_entropy -= (vert_prob * log2(vert_prob));
+        }
+        
+        double hori_prob = (double)horizontal_counts[i] / (img_size - img.height);
+        if (hori_prob > 0) {
+            horizontal_entropy -= (hori_prob * log2(hori_prob));
+        }
     }
 
 
-
-
-
-
+    // print
+    std::cout << "Normal Entropy: " << normal_entropy << "\n";
+    std::cout << "Vertical Comparison Entropy: " << vertical_entropy << "\n";
+    std::cout << "Horizontal Comparison Entropy: " << horizontal_entropy << "\n";
 
     return 0;
 

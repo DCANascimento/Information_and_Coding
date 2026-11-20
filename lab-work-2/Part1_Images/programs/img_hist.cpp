@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
 
     if (file_type.compare(".raw") == 0) {
     
-        Image_16 img = read_raw16("../datasets/img-raw16/" + file_name);
+        Image_16 img = read_raw16("../datasets/imgs-raw16/" + file_name);
 
         if (raw16_histogram(img, bin_width, file_name)) {
             return 1;
@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 
     } else if (file_type.compare(".pgm") == 0) {
 
-        Image_8 img = read_pgm8("../datasets/img-pgm8/" + file_name);
+        Image_8 img = read_pgm8("../datasets/imgs-pgm8/" + file_name);
 
         if (pgm8_histogram(img, bin_width, file_name)) {
             return 1;
@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
 
     } else if (file_type.compare(".ppm") == 0) {
 
-        Image_8 img = read_ppm("../datasets/img-ppm/" + file_name);
+        Image_8 img = read_ppm("../datasets/imgs-ppm/" + file_name);
 
         if (ppm_histogram(img, bin_width, file_name)) {
             return 1;
