@@ -9,10 +9,8 @@
 
 Image_16 read_raw16(std::string file_name) {
 
-    std::string full_path_file = "../datasets/imgs-raw16/" + file_name;
-
     // opens the file in the end, to count the total size
-    std::ifstream file(full_path_file, std::ios::binary | std::ios::ate);
+    std::ifstream file(file_name, std::ios::binary | std::ios::ate);
     if (!file.is_open()) {
         throw std::runtime_error("Could not open file");
     }
@@ -55,10 +53,8 @@ Image_16 read_raw16(std::string file_name) {
 
 Image_8 read_pgm8(std::string file_name) {
 
-    std::string full_path_file = "../datasets/imgs-pgm8/" + file_name;
-
     // opens the file in the end, to count the total size
-    std::ifstream file(full_path_file, std::ios::binary | std::ios::ate);
+    std::ifstream file(file_name, std::ios::binary | std::ios::ate);
     if (!file.is_open()) {
         throw std::runtime_error("Could not open file");
     }
@@ -140,9 +136,7 @@ Image_8 read_pgm8(std::string file_name) {
 
 Image_8 read_ppm(std::string file_name) {
 
-    std::string full_path_file = "../datasets/imgs-ppm/" + file_name;
-
-    std::ifstream file(full_path_file, std::ios::binary | std::ios::ate);
+    std::ifstream file(file_name, std::ios::binary | std::ios::ate);
     if (!file.is_open()) {
         throw std::runtime_error("Could not open file");
     }

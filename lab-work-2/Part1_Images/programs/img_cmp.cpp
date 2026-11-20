@@ -21,8 +21,8 @@ int main(int argc, char **argv) {
 
     if (file_type.compare(".raw") == 0) {
     
-        Image_16 original_image = read_raw16(original_file);
-        Image_16 quantized_image = read_raw16(quantized_file);
+        Image_16 original_image = read_raw16("../datasets/img-raw16/" + original_file);
+        Image_16 quantized_image = read_raw16("Quants/" + quantized_file);
 
         if (compare_uint16(original_image.pixels, quantized_image.pixels)) {
             return 1;
@@ -31,8 +31,8 @@ int main(int argc, char **argv) {
 
     } else if (file_type.compare(".pgm") == 0) {
 
-        Image_8 original_img = read_pgm8(original_file);
-        Image_8 quantized_img = read_pgm8(quantized_file);
+        Image_8 original_img = read_pgm8("../datasets/img-pgm8/" + original_file);
+        Image_8 quantized_img = read_pgm8("Quants/" + quantized_file);
 
         if (compare_uint8(original_img.pixels, quantized_img.pixels)) {
             return 1;
@@ -40,8 +40,8 @@ int main(int argc, char **argv) {
 
     } else if (file_type.compare(".ppm") == 0) {
 
-        Image_8 original_img = read_ppm(original_file);
-        Image_8 quantized_img = read_ppm(quantized_file);
+        Image_8 original_img = read_ppm("../datasets/img-ppm/" + original_file);
+        Image_8 quantized_img = read_ppm("Quants/" + quantized_file);
 
         if (compare_uint8(original_img.pixels, quantized_img.pixels)) {
             return 1;
