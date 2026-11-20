@@ -26,7 +26,7 @@ int compare_uint8(std::vector<uint8_t> original_pixels, std::vector<uint8_t> qua
 
     }
 
-    int psnr = 10 * log10(255 / max_error);
+    double psnr = 10.0 * log10(255.0 * 255.0 / max_error);
 
     std::cout << "Maximum Absolute Error: " << max_error << "\n";
     std::cout << "Peak-Signal-To-Noise Ratio: " << psnr << "\n";
@@ -57,7 +57,7 @@ int compare_uint16(std::vector<uint16_t> original_pixels, std::vector<uint16_t> 
 
     }
 
-    int psnr = 10 * log10(65535 / max_error);
+    double psnr = 10.0 * log10(65535.0 * 65535.0 / max_error);
 
     std::cout << "Maximum Absolute Error: " << max_error << "\n";
     std::cout << "Peak-Signal-To-Noise Ratio: " << psnr << "\n";
