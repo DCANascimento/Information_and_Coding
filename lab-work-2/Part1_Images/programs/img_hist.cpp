@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
     
         Image_16 img = read_raw16(file_name);
 
-        if (raw16_histogram(img.pixels, bin_width, file_name)) {
+        if (raw16_histogram(img, bin_width, file_name)) {
             return 1;
         }
 
@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
 
         Image_8 img = read_pgm8(file_name);
 
-        if (pgm8_histogram(img.pixels, bin_width, file_name)) {
+        if (pgm8_histogram(img, bin_width, file_name)) {
             return 1;
         }
 
@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
 
         Image_8 img = read_ppm(file_name);
 
-        if (ppm_histogram(img.pixels, bin_width, file_name)) {
+        if (ppm_histogram(img, bin_width, file_name)) {
             return 1;
         }
 

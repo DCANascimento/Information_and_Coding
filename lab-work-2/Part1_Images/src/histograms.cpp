@@ -138,7 +138,7 @@ int plot_histogram(std::vector<int> hist_counts, std::string file_name, std::str
 }
 
 
-int raw16_histogram(std::vector<uint16_t> pixels, int bin_width, std::string file_name) {
+int raw16_histogram(Image_16 img, int bin_width, std::string file_name) {
 
     int max_value = 65535;
 
@@ -146,7 +146,7 @@ int raw16_histogram(std::vector<uint16_t> pixels, int bin_width, std::string fil
 
     std::vector<int> hist_counts(vector_length, 0);
 
-    for (uint16_t pixel : pixels) {
+    for (uint16_t pixel : img.pixels) {
         hist_counts[pixel / bin_width]++;
     }
 
@@ -160,16 +160,21 @@ int raw16_histogram(std::vector<uint16_t> pixels, int bin_width, std::string fil
     int normal_entropy;
 
     for (uint16_t i = 0; i < max_value + 1; i++) {
-        int prob = hist_counts[i] / pixels.size();
+        int prob = hist_counts[i] / img.pixels.size();
         normal_entropy -= (prob * log2(prob));
     }
+
+
+
+
+
 
 
     return 0;
 
 }
 
-int pgm8_histogram(std::vector<uint8_t> pixels, int bin_width, std::string file_name) {
+int pgm8_histogram(Image_8 img, int bin_width, std::string file_name) {
 
     int max_value = 255;
 
@@ -177,7 +182,7 @@ int pgm8_histogram(std::vector<uint8_t> pixels, int bin_width, std::string file_
 
     std::vector<int> hist_counts(vector_length, 0);
 
-    for (uint16_t pixel : pixels) {
+    for (uint16_t pixel : img.pixels) {
         hist_counts[pixel / bin_width]++;
     }
 
@@ -190,7 +195,7 @@ int pgm8_histogram(std::vector<uint8_t> pixels, int bin_width, std::string file_
     int normal_entropy;
 
     for (uint8_t i = 0; i < max_value + 1; i++) {
-        int prob = hist_counts[i] / pixels.size();
+        int prob = hist_counts[i] / img.pixels.size();
         normal_entropy -= (prob * log2(prob));
     }
 
@@ -198,7 +203,7 @@ int pgm8_histogram(std::vector<uint8_t> pixels, int bin_width, std::string file_
 
 }
 
-int ppm_histogram(std::vector<uint8_t> pixels, int bin_width, std::string file_name) {
+int ppm_histogram(Image_8 img, int bin_width, std::string file_name) {
 
     int max_value = 255;
 
@@ -209,10 +214,10 @@ int ppm_histogram(std::vector<uint8_t> pixels, int bin_width, std::string file_n
     std::vector<int> hist_counts_B(vector_length, 0);
 
     // going in groups of 3 since its RGB
-    for (int i = 0; i < (static_cast<int>(pixels.size())); i = i + 3) {
-        hist_counts_R[pixels[i] / bin_width]++;
-        hist_counts_G[pixels[i + 1] / bin_width]++;
-        hist_counts_B[pixels[i + 2] / bin_width]++;
+    for (int i = 0; i < (static_cast<int>(img.pixels.size())); i = i + 3) {
+        hist_counts_R[img.pixels[i] / bin_width]++;
+        hist_counts_G[img.pixels[i + 1] / bin_width]++;
+        hist_counts_B[img.pixels[i + 2] / bin_width]++;
     }
 
     if (plot_histogram(hist_counts_R, file_name, "ppm_R", bin_width, max_value) ) {
@@ -235,17 +240,17 @@ int ppm_histogram(std::vector<uint8_t> pixels, int bin_width, std::string file_n
     int normal_entropy_B;
 
     for (uint8_t i = 0; i < max_value + 1; i++) {
-        int prob = hist_counts_R[i] / pixels.size() / 3;
+        int prob = hist_counts_R[i] / img.pixels.size() / 3;
         normal_entropy_R -= (prob * log2(prob));
     }
 
     for (uint8_t i = 0; i < max_value + 1; i++) {
-        int prob = hist_counts_G[i] / pixels.size() / 3;
+        int prob = hist_counts_G[i] / img.pixels.size() / 3;
         normal_entropy_G -= (prob * log2(prob));
     }
 
     for (uint8_t i = 0; i < max_value + 1; i++) {
-        int prob = hist_counts_B[i] / pixels.size() / 3;
+        int prob = hist_counts_B[i] / img.pixels.size() / 3;
         normal_entropy_B -= (prob * log2(prob));
     }
 
