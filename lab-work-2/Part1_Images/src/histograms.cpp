@@ -7,7 +7,7 @@
 #include <filesystem>
 #include <math.h>
 
-int plot_histogram(std::vector<int> hist_counts, std::string file_name, std::string file_type, int bin_width, int max_value) {
+int plot_histogram(std::vector<int> hist, std::string file_name, std::string file_type, int bin_width, int max_value) {
 
     std::string dir_name = "Histograms";
     std::filesystem::create_directories(dir_name);
@@ -34,7 +34,7 @@ int plot_histogram(std::vector<int> hist_counts, std::string file_name, std::str
 
     // Find the maximum bar height to scale the Y-axis
     long max_count = 1;
-    for (int count : hist_counts) {
+    for (int count : hist) {
         if (count > max_count) {
             max_count = count;
         }
@@ -103,7 +103,7 @@ int plot_histogram(std::vector<int> hist_counts, std::string file_name, std::str
     // Draw histogram
     double bin_width_px = static_cast<double>(plot_width) / num_bins;
     for (int i = 0; i < num_bins; ++i) {
-        double bar_h = (static_cast<double>(hist_counts[i]) / max_count) * plot_height;
+        double bar_h = (static_cast<double>(hist[i]) / max_count) * plot_height;
         double x_pos = margin_left + (i * bin_width_px);
         double y_pos = (height - margin_bottom) - bar_h;
 
@@ -144,7 +144,9 @@ int raw16_histogram(Image_16 img, int bin_width, std::string file_name) {
 
     int vector_length = (max_value / bin_width) + 1;
 
-    std::vector<int> hist_counts(vector_length, 0);
+    std::vector<int> hist(vector_length, 0);
+
+    std::vector<int> hist_counts(max_value + 1, 0);
     std::vector<int> vertical_counts(max_value + 1, 0);
     std::vector<int> horizontal_counts(max_value + 1, 0);
 
@@ -152,7 +154,8 @@ int raw16_histogram(Image_16 img, int bin_width, std::string file_name) {
 
     for (size_t i = 0; i < img_size; i++) {
 
-        hist_counts[img.pixels[i] / bin_width]++;
+        hist[img.pixels[i] / bin_width]++;
+        hist_counts[img.pixels[i]]++;
 
         // doesnt trigger on the last line
         if (i < (unsigned int)(img.width * (img.height - 1))) {
@@ -167,7 +170,7 @@ int raw16_histogram(Image_16 img, int bin_width, std::string file_name) {
     }
 
 
-    if (plot_histogram(hist_counts, file_name, "raw16", bin_width, max_value) ) {
+    if (plot_histogram(hist, file_name, "raw16", bin_width, max_value) ) {
         std::cerr << "Error creating the svg file\n";
         return 1;
     }
@@ -208,28 +211,67 @@ int raw16_histogram(Image_16 img, int bin_width, std::string file_name) {
 
 int pgm8_histogram(Image_8 img, int bin_width, std::string file_name) {
 
-    int max_value = 255;
+    uint8_t max_value = 255;
 
     int vector_length = (max_value / bin_width) + 1;
 
-    std::vector<int> hist_counts(vector_length, 0);
+    std::vector<int> hist(vector_length, 0);
 
-    for (uint16_t pixel : img.pixels) {
-        hist_counts[pixel / bin_width]++;
+    std::vector<int> hist_counts(max_value + 1, 0);
+    std::vector<int> vertical_counts(max_value + 1, 0);
+    std::vector<int> horizontal_counts(max_value + 1, 0);
+
+    size_t img_size = img.pixels.size();
+
+    for (size_t i = 0; i < img_size; i++) {
+
+        hist[img.pixels[i] / bin_width]++;
+        hist_counts[img.pixels[i]]++;
+
+        if (i < (unsigned int)(img.width * (img.height - 1))) {
+            vertical_counts[abs(img.pixels[i] - img.pixels[i + img.width])]++;
+        }
+
+        if (i % img.width != (unsigned int)img.width - 1) {
+            horizontal_counts[abs(img.pixels[i] - img.pixels[i + 1])]++;
+        }
+        
     }
 
 
-    if (plot_histogram(hist_counts, file_name, "pgm8", bin_width, max_value) ) {
+    if (plot_histogram(hist, file_name, "pgm8", bin_width, max_value) ) {
         std::cerr << "Error creating the svg file\n";
         return 1;
     }
 
-    int normal_entropy;
 
-    for (uint8_t i = 0; i < max_value + 1; i++) {
-        int prob = hist_counts[i] / img.pixels.size();
-        normal_entropy -= (prob * log2(prob));
+    double normal_entropy = 0.0;
+    double vertical_entropy = 0.0;
+    double horizontal_entropy = 0.0;
+
+
+    for (uint16_t i = 0; i < (unsigned int)max_value + 1; i++) {
+
+        double prob = (double)hist_counts[i] / img_size;
+        if (prob > 0) {
+            normal_entropy -= (prob * log2(prob));
+        }
+
+        double vert_prob = (double)vertical_counts[i] / (img_size - img.width);
+        if (vert_prob > 0) {
+            vertical_entropy -= (vert_prob * log2(vert_prob));
+        }
+        
+        double hori_prob = (double)horizontal_counts[i] / (img_size - img.height);
+        if (hori_prob > 0) {
+            horizontal_entropy -= (hori_prob * log2(hori_prob));
+        }
     }
+
+
+    std::cout << "Normal Entropy: " << normal_entropy << "\n";
+    std::cout << "Vertical Comparison Entropy: " << vertical_entropy << "\n";
+    std::cout << "Horizontal Comparison Entropy: " << horizontal_entropy << "\n";
 
     return 0;
 
@@ -237,54 +279,141 @@ int pgm8_histogram(Image_8 img, int bin_width, std::string file_name) {
 
 int ppm_histogram(Image_8 img, int bin_width, std::string file_name) {
 
-    int max_value = 255;
+    uint8_t max_value = 255;
 
     int vector_length = (max_value / bin_width) + 1;
 
-    std::vector<int> hist_counts_R(vector_length, 0);
-    std::vector<int> hist_counts_G(vector_length, 0);
-    std::vector<int> hist_counts_B(vector_length, 0);
+    std::vector<int> hist_R(vector_length, 0);
+    std::vector<int> hist_counts_R(max_value + 1, 0);
+    std::vector<int> vertical_counts_R(max_value + 1, 0);
+    std::vector<int> horizontal_counts_R(max_value + 1, 0);
 
-    // going in groups of 3 since its RGB
-    for (int i = 0; i < (static_cast<int>(img.pixels.size())); i = i + 3) {
-        hist_counts_R[img.pixels[i] / bin_width]++;
-        hist_counts_G[img.pixels[i + 1] / bin_width]++;
-        hist_counts_B[img.pixels[i + 2] / bin_width]++;
+    std::vector<int> hist_G(vector_length, 0);
+    std::vector<int> hist_counts_G(max_value + 1, 0);
+    std::vector<int> vertical_counts_G(max_value + 1, 0);
+    std::vector<int> horizontal_counts_G(max_value + 1, 0);
+
+    std::vector<int> hist_B(vector_length, 0);
+    std::vector<int> hist_counts_B(max_value + 1, 0);
+    std::vector<int> vertical_counts_B(max_value + 1, 0);
+    std::vector<int> horizontal_counts_B(max_value + 1, 0);
+
+    size_t img_size = img.pixels.size() / 3;
+
+    for (size_t i = 0; i < img_size; i++) {
+
+        size_t true_i = i * 3;
+
+        hist_R[img.pixels[true_i] / bin_width]++;
+        hist_G[img.pixels[true_i + 1] / bin_width]++;
+        hist_B[img.pixels[true_i + 2] / bin_width]++;
+
+        hist_counts_R[img.pixels[true_i]]++;
+        hist_counts_G[img.pixels[true_i + 1]]++;
+        hist_counts_B[img.pixels[true_i + 2]]++;
+
+        if (i < (unsigned int)(img.width * (img.height - 1))) {
+            vertical_counts_R[abs(img.pixels[true_i] - img.pixels[true_i + img.width * 3])]++;
+            vertical_counts_G[abs(img.pixels[true_i + 1] - img.pixels[true_i + 1 + img.width * 3])]++;
+            vertical_counts_B[abs(img.pixels[true_i + 2] - img.pixels[true_i + 2 + img.width * 3])]++;
+        }
+
+        if (i % img.width != (unsigned int)img.width - 1) {
+            horizontal_counts_R[abs(img.pixels[true_i] - img.pixels[true_i + 1])]++;
+            horizontal_counts_G[abs(img.pixels[true_i + 1] - img.pixels[true_i + 1 + 1])]++;
+            horizontal_counts_B[abs(img.pixels[true_i + 2] - img.pixels[true_i + 2 + 1])]++;
+        }
+        
     }
 
-    if (plot_histogram(hist_counts_R, file_name, "ppm_R", bin_width, max_value) ) {
+
+    if (plot_histogram(hist_R, file_name, "ppm_R", bin_width, max_value) ) {
         std::cerr << "Error creating the svg file\n";
         return 1;
     }
 
-    if (plot_histogram(hist_counts_G, file_name, "ppm_G", bin_width, max_value) ) {
+    if (plot_histogram(hist_G, file_name, "ppm_G", bin_width, max_value) ) {
         std::cerr << "Error creating the svg file\n";
         return 1;
     }
 
-    if (plot_histogram(hist_counts_B, file_name, "ppm_B", bin_width, max_value) ) {
+    if (plot_histogram(hist_B, file_name, "ppm_B", bin_width, max_value) ) {
         std::cerr << "Error creating the svg file\n";
         return 1;
     }
 
-    int normal_entropy_R;
-    int normal_entropy_G;
-    int normal_entropy_B;
 
-    for (uint8_t i = 0; i < max_value + 1; i++) {
-        int prob = hist_counts_R[i] / img.pixels.size() / 3;
-        normal_entropy_R -= (prob * log2(prob));
+    double normal_entropy_R = 0.0;
+    double normal_entropy_G = 0.0;
+    double normal_entropy_B = 0.0;
+
+    double vertical_entropy_R = 0.0;
+    double vertical_entropy_G = 0.0;
+    double vertical_entropy_B = 0.0;
+
+    double horizontal_entropy_R = 0.0;
+    double horizontal_entropy_G = 0.0;
+    double horizontal_entropy_B = 0.0;
+
+
+    for (uint16_t i = 0; i < (unsigned int)max_value + 1; i++) {
+
+        // R
+        double prob = (double)hist_counts_R[i] / img_size;
+        if (prob > 0) {
+            normal_entropy_R -= (prob * log2(prob));
+        }
+
+        double vert_prob = (double)vertical_counts_R[i] / (img_size - img.width);
+        if (vert_prob > 0) {
+            vertical_entropy_R -= (vert_prob * log2(vert_prob));
+        }
+        
+        double hori_prob = (double)horizontal_counts_R[i] / (img_size - img.height);
+        if (hori_prob > 0) {
+            horizontal_entropy_R -= (hori_prob * log2(hori_prob));
+        }
+
+
+        // G
+        prob = (double)hist_counts_G[i] / img_size;
+        if (prob > 0) {
+            normal_entropy_G -= (prob * log2(prob));
+        }
+
+        vert_prob = (double)vertical_counts_G[i] / (img_size - img.width);
+        if (vert_prob > 0) {
+            vertical_entropy_G -= (vert_prob * log2(vert_prob));
+        }
+        
+        hori_prob = (double)horizontal_counts_G[i] / (img_size - img.height);
+        if (hori_prob > 0) {
+            horizontal_entropy_G -= (hori_prob * log2(hori_prob));
+        }
+
+
+        // B
+        prob = (double)hist_counts_B[i] / img_size;
+        if (prob > 0) {
+            normal_entropy_B -= (prob * log2(prob));
+        }
+
+        vert_prob = (double)vertical_counts_B[i] / (img_size - img.width);
+        if (vert_prob > 0) {
+            vertical_entropy_B -= (vert_prob * log2(vert_prob));
+        }
+        
+        hori_prob = (double)horizontal_counts_B[i] / (img_size - img.height);
+        if (hori_prob > 0) {
+            horizontal_entropy_B -= (hori_prob * log2(hori_prob));
+        }
+
     }
 
-    for (uint8_t i = 0; i < max_value + 1; i++) {
-        int prob = hist_counts_G[i] / img.pixels.size() / 3;
-        normal_entropy_G -= (prob * log2(prob));
-    }
 
-    for (uint8_t i = 0; i < max_value + 1; i++) {
-        int prob = hist_counts_B[i] / img.pixels.size() / 3;
-        normal_entropy_B -= (prob * log2(prob));
-    }
+    std::cout << "Normal Entropies (R/G/B): " << normal_entropy_R << "/" << normal_entropy_G << "/" << normal_entropy_B << "\n";
+    std::cout << "Vertical Comparison Entropies (R/G/B): " << vertical_entropy_R << "/" << vertical_entropy_G << "/" << vertical_entropy_B << "\n";
+    std::cout << "Horizontal Comparison Entropies (R/G/B): " << horizontal_entropy_R << "/" << horizontal_entropy_G << "/" << horizontal_entropy_B << "\n";
 
     return 0;
 

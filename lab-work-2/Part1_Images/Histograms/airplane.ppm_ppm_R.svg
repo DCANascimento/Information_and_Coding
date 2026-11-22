@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="400">
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="500" y="25" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#333">PPM Image Histogram (Red)</text>
+  <line x1="70" y1="340" x2="970" y2="340" stroke="#333" stroke-width="1.5"/>
+  <line x1="70" y1="40" x2="70" y2="340" stroke="#333" stroke-width="1.5"/>
+  <text x="60" y="344" text-anchor="end" font-family="Arial" font-size="11" fill="#666">0</text>
+  <line x1="70" y1="280" x2="970" y2="280" stroke="#f0f0f0" stroke-dasharray="4,4"/>
+  <text x="60" y="284" text-anchor="end" font-family="Arial" font-size="11" fill="#666">12996</text>
+  <line x1="70" y1="220" x2="970" y2="220" stroke="#f0f0f0" stroke-dasharray="4,4"/>
+  <text x="60" y="224" text-anchor="end" font-family="Arial" font-size="11" fill="#666">25993</text>
+  <line x1="70" y1="160" x2="970" y2="160" stroke="#f0f0f0" stroke-dasharray="4,4"/>
+  <text x="60" y="164" text-anchor="end" font-family="Arial" font-size="11" fill="#666">38990</text>
+  <line x1="70" y1="100" x2="970" y2="100" stroke="#f0f0f0" stroke-dasharray="4,4"/>
+  <text x="60" y="104" text-anchor="end" font-family="Arial" font-size="11" fill="#666">51987</text>
+  <line x1="70" y1="40" x2="970" y2="40" stroke="#f0f0f0" stroke-dasharray="4,4"/>
+  <text x="60" y="44" text-anchor="end" font-family="Arial" font-size="11" fill="#666">64984</text>
+  <line x1="70" y1="340" x2="70" y2="346" stroke="#333" stroke-width="1"/>
+  <text x="70" y="360" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">0</text>
+  <line x1="250" y1="340" x2="250" y2="346" stroke="#333" stroke-width="1"/>
+  <text x="250" y="360" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">51</text>
+  <line x1="430" y1="340" x2="430" y2="346" stroke="#333" stroke-width="1"/>
+  <text x="430" y="360" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">102</text>
+  <line x1="610" y1="340" x2="610" y2="346" stroke="#333" stroke-width="1"/>
+  <text x="610" y="360" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">153</text>
+  <line x1="790" y1="340" x2="790" y2="346" stroke="#333" stroke-width="1"/>
+  <text x="790" y="360" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">204</text>
+  <line x1="970" y1="340" x2="970" y2="346" stroke="#333" stroke-width="1"/>
+  <text x="970" y="360" text-anchor="middle" font-family="Arial" font-size="10" fill="#666">255</text>
+  <rect x="70" y="340" width="35.5" height="0" fill="#ff0000" opacity="0.85"/>
+  <rect x="106" y="340" width="35.5" height="0" fill="#ff0000" opacity="0.85"/>
+  <rect x="142" y="339.1" width="35.5" height="0.900222" fill="#ff0000" opacity="0.85"/>
+  <rect x="178" y="334.862" width="35.5" height="5.13819" fill="#ff0000" opacity="0.85"/>
+  <rect x="214" y="330.448" width="35.5" height="9.55158" fill="#ff0000" opacity="0.85"/>
+  <rect x="250" y="331.93" width="35.5" height="8.06968" fill="#ff0000" opacity="0.85"/>
+  <rect x="286" y="330.984" width="35.5" height="9.01607" fill="#ff0000" opacity="0.85"/>
+  <rect x="322" y="320.961" width="35.5" height="19.0385" fill="#ff0000" opacity="0.85"/>
+  <rect x="358" y="308.594" width="35.5" height="31.4062" fill="#ff0000" opacity="0.85"/>
+  <rect x="394" y="300.82" width="35.5" height="39.1804" fill="#ff0000" opacity="0.85"/>
+  <rect x="430" y="301.355" width="35.5" height="38.6449" fill="#ff0000" opacity="0.85"/>
+  <rect x="466" y="309.48" width="35.5" height="30.5198" fill="#ff0000" opacity="0.85"/>
+  <rect x="502" y="316.026" width="35.5" height="23.9736" fill="#ff0000" opacity="0.85"/>
+  <rect x="538" y="316.35" width="35.5" height="23.6504" fill="#ff0000" opacity="0.85"/>
+  <rect x="574" y="313.233" width="35.5" height="26.7666" fill="#ff0000" opacity="0.85"/>
+  <rect x="610" y="312.809" width="35.5" height="27.1913" fill="#ff0000" opacity="0.85"/>
+  <rect x="646" y="308.368" width="35.5" height="31.6324" fill="#ff0000" opacity="0.85"/>
+  <rect x="682" y="293.235" width="35.5" height="46.7654" fill="#ff0000" opacity="0.85"/>
+  <rect x="718" y="241.904" width="35.5" height="98.0965" fill="#ff0000" opacity="0.85"/>
+  <rect x="754" y="139.103" width="35.5" height="200.897" fill="#ff0000" opacity="0.85"/>
+  <rect x="790" y="40" width="35.5" height="300" fill="#ff0000" opacity="0.85"/>
+  <rect x="826" y="120.697" width="35.5" height="219.303" fill="#ff0000" opacity="0.85"/>
+  <rect x="862" y="319.553" width="35.5" height="20.4466" fill="#ff0000" opacity="0.85"/>
+  <rect x="898" y="339.995" width="35.5" height="0.00461652" fill="#ff0000" opacity="0.85"/>
+  <rect x="934" y="340" width="35.5" height="0" fill="#ff0000" opacity="0.85"/>
+  <text x="520" y="385" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="#333">Pixel Intensity (0 - max_value)</text>
+</svg>
